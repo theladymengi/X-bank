@@ -1,0 +1,16 @@
+  230  git commit -m "Mengi Ticket 001 Assignment"
+  231  git push
+  232  git remote -v
+  233  cd ..
+  234  cd ..
+  235  git remote set-url origin https://github.com/theladymengix/X-bank.git
+  236  git remote -v
+  237  git remote set-url origin https://github.com/theladymengi/X-bank.git
+  238  git remote -v
+  239  git push -u origin main
+  240  git remote set-url origin https://github.com/theladymengi/X-bank.git
+  241  git remote -v
+  242  git push -u origin main
+  243  tree srv
+  244  git status
+  245  pwd
