@@ -1,0 +1,80 @@
+1. tellers:x:1001:tunde,amina
+   managers:x:1002:ngozi,amina
+   auditors:x:1003:kemi
+   customers:x:1004:mrjohnson,mrsokafor
+2. tunde:x:1001:1005:Teller, Front Desk:/home/tunde:/bin/bash 
+2b. Explain the fields:
+tunde = The teller. The username used to log into the system.
+x = A placeholder showing that the encrypted password is stored in /etc/shadow
+1001 = Tunde's User ID (UID), which uniquely identifies him to the Linux kernel.
+1005 = The Group ID (GID) of Tunde's primary group.
+Teller, Front Desk = The comment (GECOS) field describing the user's job title.
+/home/tunde = Tunde's home directory where his personal files are stored.
+/bin/bash = The shell that starts when Tunde logs in.
+
+3. id tunde
+uid=1001(tunde) gid=1005(tunde) groups=1005(tunde),1001(tellers)
+
+id amina
+uid=1002(amina) gid=1006(amina) groups=1006(amina),1001(tellers),1002(managers)
+
+id ngozi
+uid=1003(ngozi) gid=1007(ngozi) groups=1007(ngozi),1002(managers)
+
+id kemi
+uid=1004(kemi) gid=1008(kemi) groups=1008(kemi),1003(auditors)
+
+id mrjohnson
+uid=1005(mrjohnson) gid=1009(mrjohnson) groups=1009(mrjohnson),1004(customers)
+
+id mrsokafor
+uid=1006(mrsokafor) gid=1010(mrsokafor) groups=1010(mrsokafor),1004(customers)
+
+4. $y$: yescrypt. I identified the hashing algorithm from the prefix of the password hash in /etc/shadow. The hash begins with $y$, which indicates that Ubuntu is using the yescrypt password hashing algorithm.
+5. Last password change: Jul 28, 2026
+   Password expires: Oct 26, 2026
+   Password inactive: never
+   Account expires: never
+   Minimum number of days between password change: 0
+  Maximum number of days between password change: 90
+  Number of days of warning before password expires: 7
+
+6. Rule: %managers ALL=(ALL:ALL) ALL
+   %managers: The rule applies to every user who belongs to the managers group.
+
+ALL: The rule is valid on all hosts.
+
+(ALL:ALL): Members of the group may run commands as any user and any group.
+
+ALL: They are allowed to run all commands.
+
+7. ngozi: User ngozi may run the following commands on ip-172-31-24-46:
+    (ALL : ALL) ALL
+   tunde@ip-172-31-24-46:~$ sudo ls /srv/bank/vault
+   sudo: I'm sorry tunde. I'm afraid I can't do that
+I don't have the denied sudo log entry.
+
+My grep "tunde" output only shows:
+user creation
+password changes
+su sessions
+
+There is no log entry for the denied sudo attempt.
+
+8. Shadow entry: mrjohnson:!$y$j9T$y6duaMAvKYbu.D3daKNvy.$A8bsMigELCXfDOynHlqR383k0SQoYn7eHEusqzaa7S9:20662:0:99999:7::19723:
+   Failed login: su - mrjohnson
+Password:
+su: Authentication failure
+Home directory: drwxr-x--- 2 mrjohnson mrjohnson 4096 Jul 28 21:14 /home/mrjohnson
+
+9. Why are /etc/passwd and /etc/shadow separate files?
+
+/etc/passwd stores basic user information that everyone can read, while /etc/shadow stores encrypted passwords that only administrators can access. This helps keep user passwords secure.
+
+Why does the bank lock departed customers instead of deleting them?
+Locking the account prevents login while keeping the user's files and records. This preserves important information for audits and future reference.
+
+Why does the bank mandate sudo instead of sharing the root password?
+sudo lets each manager use their own password to perform admin tasks. This improves security and keeps a record of who ran each command.
+
+Locking the account does not allow login while keeping the user's files and records. This preserves important information for audits and future reference.
